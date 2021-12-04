@@ -5,15 +5,17 @@ const day2spl = day2tog.split(re)
 
 let hor = 0
 let dep = 0
+let aim = 0
 for(i = 0; i < day2spl.length - 1; i+=2) {
-  if(day2spl[i] == 'forward') {
-    hor += parseInt(day2spl[i+1])
-  }
   if(day2spl[i] == 'down') {
-    dep += parseInt(day2spl[i+1])
+    aim += parseInt(day2spl[i+1])
   }
   if(day2spl[i] == 'up') {
-    dep -= parseInt(day2spl[i+1])
+    aim -= parseInt(day2spl[i+1])
+  }
+  if(day2spl[i] == 'forward') {
+    hor += parseInt(day2spl[i+1])
+    dep += aim*parseInt(day2spl[i+1])
   }
 }
-console.log(`hor: ${hor}, dep: ${dep}`)
+console.log(`hor: ${hor}, dep: ${dep}, aim: ${aim}`)
