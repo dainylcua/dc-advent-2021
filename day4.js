@@ -8,6 +8,13 @@ const boards = []
 let drawnIndex = 0
 let winner = false
 let winBoard = [{}]
+let winningBoards = [{}]
+
+for (i = 0; i < numArr.length; i+=size) {
+  const board = numArr.slice(i, i+size)
+  boards.push({ board, hasNums: [], wonBefore: false, winningCombo: [], winningNum: NaN })
+}
+
 
 function isSubset(arr1, arr2) {
   return arr2.every((el) => {
@@ -15,35 +22,36 @@ function isSubset(arr1, arr2) {
   })
 }
 
-for (i = 0; i < numArr.length; i+=size) {
-  const board = numArr.slice(i, i+size)
-  boards.push({ board, hasNums: [] })
-}
-
-// While there is no winner
-while (winner === false) {
-  // Draw a number
+function checkBoards() {
+// Draw a number
   const currNum = draws[drawnIndex]
   // Check if board has number
   boards.forEach((b, idx) => {
-    // If board has number
-    if (b.board.indexOf(currNum) != -1) {
-      // Add number into board's hasNums array
-      b.hasNums.push(currNum)
-      // Then check if that board is now a winner by first getting the indices of numbers it has
-      const boardIndices = []
-      b.hasNums.forEach((num, idx) => {
-        boardIndices.push(b.board.indexOf(num))
-      })
-      // After getting indices, check for any valid combos
-      wins.forEach((combo) => {
-        // Set winner to true if a winning combo is in boardIndices
-        if(isSubset(boardIndices, combo)) {
-          winner = true
-          winBoard = boards[idx]
+    // As long as board has not won before
+      if(b.wonBefore === false) {
+        // If board has number
+        if(b.board.indexOf(currNum) != -1) {
+          // Add number into board's hasNums array
+          b.hasNums.push(currNum)
+          // Then check if that board is now a winner by first getting the indices of numbers it has
+          const boardIndices = []
+          b.hasNums.forEach((num, idx) => {
+            boardIndices.push(b.board.indexOf(num))
+          })
+          // After getting indices, check for any valid combos
+          wins.forEach((combo) => {
+            // Set winner to true if a winning combo is in boardIndices
+            if(isSubset(boardIndices, combo)) {
+              winner = true
+              b.wonBefore = true
+              b.winningCombo = combo
+              b.winningNum = currNum
+              winBoard = boards[idx]
+              winningBoards.push(winBoard)
+            }
+          })
         }
-      })
-    }
+      }
   })
   // Increase number if no winner
   drawnIndex++
@@ -55,7 +63,23 @@ while (winner === false) {
   // }
 }
 
+
+// While there is no winner
+while (winner === false) {
+  checkBoards()
+}
+
 // Now, conduct logic for score
 const tot = winBoard.board.reduce((pv, cv) => pv + cv, 0) - winBoard.hasNums.reduce((pv, cv) => pv + cv, 0)
 const score = tot * winBoard.hasNums.at(-1)
 console.log(score)
+
+// Part 2, get the last board
+for(i = 0; i < draws.length; i++) {
+  checkBoards()
+}
+const lastWinner = winningBoards[winningBoards.length-1]
+
+const tot2 = lastWinner.board.reduce((pv, cv) => pv + cv, 0) - lastWinner.hasNums.reduce((pv, cv) => pv + cv, 0)
+const score2 = tot2 * lastWinner.winningNum
+console.log(score2)
