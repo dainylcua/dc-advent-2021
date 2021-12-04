@@ -56,3 +56,6 @@ while (winner === false) {
 }
 
 // Now, conduct logic for score
+const tot = winBoard.board.reduce((pv, cv) => pv + cv, 0) - winBoard.hasNums.reduce((pv, cv) => pv + cv, 0)
+const score = tot * winBoard.hasNums.at(-1)
+console.log(score)
