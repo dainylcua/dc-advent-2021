@@ -27,16 +27,35 @@ finalBinary.forEach((bit, idx) => {
   }
 })
 
-gamBit.map((bit, idx) => {
-  gamConv[idx] = bit * Math.pow(2,(11-idx))
-})
+const calcVal = (bit) => {
+  const arr = []
+  bit.map((bit, idx) => {
+    arr.push(bit*Math.pow(2,11-idx))
+  })
+  return arr.reduce((prev, curr) => prev + curr)
+}
 
-epsBit.map((bit, idx) => {
-  epsConv[idx] = bit * Math.pow(2,(11-idx))
-})
+console.log(calcVal(gamBit))
+console.log(calcVal(epsBit))
 
-gam = gamConv.reduce((prev, curr) => prev + curr)
-eps = epsConv.reduce((prev, curr) => prev + curr)
+// Part 2
+const calcOxygen = (inArr) => {
+  let currArr = inArr
 
-console.log(gam)
-console.log(eps)
+  for (i = 0; i < bitLen; i++) {
+    let currCount = 0
+    // Checks for the most common bit in the current position
+    currArr.forEach((bit) => {
+      // Find the sum of all bits in that position
+      currCount += parseInt(bit.slice(i+1, i+2))
+    })
+    // If greater than half, more bits are 1 than 0
+    let currMost = currCount >= currArr.length/2 ? 1 : 0
+
+    // Filter out all the bits which the current position is not the majority
+    currArr = currArr.filter((bit) => bit.slice(i, i+1) == currMost)
+    if (currArr.length === 1) {
+      return currArr
+    }
+  }
+}
