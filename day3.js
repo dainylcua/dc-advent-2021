@@ -35,19 +35,20 @@ const calcVal = (bit) => {
   return arr.reduce((prev, curr) => prev + curr)
 }
 
-console.log(calcVal(gamBit))
-console.log(calcVal(epsBit))
+// console.log(calcVal(gamBit))
+// console.log(calcVal(epsBit))
 
 // Part 2
-const calcOxygen = (inArr) => {
+const calcOxygen = (inArr, calcVal) => {
   let currArr = inArr
+  let oxString = ''
 
   for (i = 0; i < bitLen; i++) {
     let currCount = 0
     // Checks for the most common bit in the current position
     currArr.forEach((bit) => {
       // Find the sum of all bits in that position
-      currCount += parseInt(bit.slice(i+1, i+2))
+      currCount += parseInt(bit.slice(i, i+1))
     })
     // If greater than half, more bits are 1 than 0
     let currMost = currCount >= currArr.length/2 ? 1 : 0
@@ -55,7 +56,42 @@ const calcOxygen = (inArr) => {
     // Filter out all the bits which the current position is not the majority
     currArr = currArr.filter((bit) => bit.slice(i, i+1) == currMost)
     if (currArr.length === 1) {
-      return currArr
+      oxString = currArr[0]
+      console.log('This is oxString', oxString)
+      break
     }
   }
+  const oxSplit = oxString.split('')
+  return calcVal(oxSplit)
 }
+
+const calcCO2 = (inArr, calcVal) => {
+  let currArr = inArr
+  let coString = ''
+
+  for (i = 0; i < bitLen; i++) {
+    let currCount = 0
+    // Checks for the most common bit in the current position
+    currArr.forEach((bit) => {
+      // Find the sum of all bits in that position
+      currCount += parseInt(bit.slice(i, i+1))
+    })
+    // If greater than half, more bits are 1 than 0
+    let currMost = currCount >= currArr.length/2 ? 1 : 0
+
+    // Filter out all the bits which the current position is not the minority
+    currArr = currArr.filter((bit) => bit.slice(i, i+1) != currMost)
+    if (currArr.length === 1) {
+      coString = currArr[0]
+      console.log('This is coString', coString)
+      break
+    }
+  }
+  const coSplit = coString.split('')
+  return calcVal(coSplit)
+}
+const ox = calcOxygen(arr, calcVal)
+const co2 = calcCO2(arr, calcVal)
+console.log(ox)
+console.log(co2)
+console.log(ox*co2)
