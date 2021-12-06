@@ -57,11 +57,55 @@ for(i = 0; i < entries.length; i+=2) {
       }
     }
   }
+
+  // REMOVE FOR PART 1
+  // If diagonal line
+  if(y1 !== y2 && x1 !== x2) {
+    let x = x1
+    let y = y1
+    // If going downwards
+    if(y1 > y2) {
+      // If going right to left
+      if(x1 > x2) {
+        while(x >= x2) {
+          coord[x].y[y]++
+          x--
+          y--
+        }
+      } else {
+      // If going left to right
+        let x = x1
+        while(x <= x2) {
+          coord[x].y[y]++
+          x++
+          y--
+        }
+      }
+    } else {
+    // If going upwards
+      if(x1 > x2) {
+        // If going right to left
+        while(x >= x2) {
+          coord[x].y[y]++
+          x--
+          y++
+        }
+      } else {
+        while(x <= x2) {
+          coord[x].y[y]++
+          x++
+          y++
+        }
+      }
+    }
+  }
 }
 
 let heatCount = 0
+console.log(coord)
 coord.forEach((x) => {
   heatCount += x.y.filter((pt) => pt > 1).length
 })
-
+// Day 1 = 5124
+// Day 2 = 19771
 console.log(heatCount)
