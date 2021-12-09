@@ -25,5 +25,27 @@ const minFuel = fuelArray.reduce((pv, cv) => {
   return pv.fuel < cv.fuel ? pv : cv
 })
 
-console.log(fuelArray)
-console.log(minFuel)
+// console.log(fuelArray)
+// console.log(minFuel)
+// Part 1 = pos. 354, fuel 342730
+
+// Part 2: Triangular number distance - (n^2 + n)/2
+const pt2FuelArray = []
+for(i = start; i < block; i++) {
+  const distArray = day7inp.map((pos) => {
+    const dist = Math.abs(pos-i)
+    return (Math.pow(dist, 2) + dist)/2
+  })
+  const fuelSum = distArray.reduce((pv, cv) => pv + cv)
+  const fuelObj = {
+    position: i,
+    fuel: fuelSum
+  }
+  pt2FuelArray.push(fuelObj)
+}
+const pt2MinFuel = pt2FuelArray.reduce((pv, cv) => {
+  return pv.fuel < cv.fuel ? pv : cv
+})
+
+console.log(pt2FuelArray)
+console.log(pt2MinFuel)
