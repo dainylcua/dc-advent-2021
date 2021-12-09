@@ -17,7 +17,9 @@ for(i = 0; i < segs.length; i += 14) {
 // const simples = outs.filter((str) => (str.length < 5 || str.length === 7))
 // Part 1 - 274 instances
 
-const aToZ = (arr) => arr.split('').sort().join('') 
+const getKey = (object, value) => {
+  return Object.keys(object).find((key) => object[key] === value)
+}
 
 lines.forEach((line) => {
   // Now, we can break the seven segments into:
@@ -55,21 +57,53 @@ lines.forEach((line) => {
   // b: 0, 2, 3, 5, 6, 8, 9         [7]
   // br: 0, 1, 3, 4, 5, 6, 7, 8, 9  [9] UNIQUE
 
-  // Using the segment occurances, we can guarantee the top left position, bottom left position, and bottom right position
-  // By knowing the bottom right position, we can figure out the top right position (using number 1 [l:2])
-  // By knowing the top right position, we can now figure out the top position (using number 7 [l:3])
-  // By knowing the top position, we can now figure out the middle position (using number 4 [l:4])
-  // This leaves the remaining character to be the bottom position
+  // a: Using the segment occurances, we can guarantee the top left position, bottom left position, and bottom right position
+  // b: By knowing the bottom right position, we can figure out the top right position (using number 1 [l:2])
+  // c: By knowing the top right position, we can now figure out the top position (using number 7 [l:3])
+  // d: By knowing the top position, we can now figure out the middle position (using number 4 [l:4])
+  // e: This leaves the remaining character to be the bottom position
 
   const letOccurances = {
     a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0
   
   }
   const segLetters = {
-    tl: '', t: '', tr: '', m: '', ml: '', b: '', br: ''
+    tl: '', t: '', tr: '', m: '', bl: '', b: '', br: ''
   }
 
-  line.seg.forEach((seg) => {
-    
+  line.sig.forEach((s) => {
+    s.split('').forEach((char) => {
+      letOccurances[char]++
+    })
   })
+  // a
+  segLetters['tl'] = getKey(letOccurances, 6)
+  segLetters['bl'] = getKey(letOccurances, 4)
+  segLetters['br'] = getKey(letOccurances, 9)
+  // b
+  segLetters['tr'] = line.sig.filter((s) => s.length === 2)[0].split('').filter((c) => c !== segLetters['br'])[0]
+  // c
+  segLetters['t'] = line.sig.filter((s) => s.length === 3)[0].split('').filter((c) => {
+    if(c === segLetters['tr']) return
+    if(c === segLetters['br']) return
+    return c
+  })[0]
+  // d
+  segLetters['m'] = line.sig.filter((s) => s.length === 4)[0].split('').filter((c) => {
+    if(c === segLetters['tr']) return
+    if(c === segLetters['br']) return
+    if(c === segLetters['tl']) return
+    return c
+  })[0]
+  // e
+  const lettersIn = []
+  for(l in segLetters) {
+    if(segLetters[l]) lettersIn.push(segLetters[l])
+  }
+  Object.keys(letOccurances).forEach((l) => {
+    if(lettersIn.includes(l)) return
+    segLetters['b'] = l
+    return
+  })
+  console.log(segLetters)
 })
