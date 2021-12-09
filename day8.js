@@ -51,9 +51,25 @@ lines.forEach((line) => {
   // t: 0, 2, 3, 5, 6, 7, 8, 9      [8]
   // tr: 0, 1, 2, 3, 4, 7, 8, 9     [8]
   // m: 2, 3, 4, 5, 6, 8, 9         [7]
-  // ml: 0, 2, 6, 8 1               [4] UNIQUE
+  // bl: 0, 2, 6, 8 1               [4] UNIQUE
   // b: 0, 2, 3, 5, 6, 8, 9         [7]
   // br: 0, 1, 3, 4, 5, 6, 7, 8, 9  [9] UNIQUE
 
+  // Using the segment occurances, we can guarantee the top left position, bottom left position, and bottom right position
+  // By knowing the bottom right position, we can figure out the top right position (using number 1 [l:2])
+  // By knowing the top right position, we can now figure out the top position (using number 7 [l:3])
+  // By knowing the top position, we can now figure out the middle position (using number 4 [l:4])
+  // This leaves the remaining character to be the bottom position
 
+  const letOccurances = {
+    a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0
+  
+  }
+  const segLetters = {
+    tl: '', t: '', tr: '', m: '', ml: '', b: '', br: ''
+  }
+
+  line.seg.forEach((seg) => {
+    
+  })
 })
